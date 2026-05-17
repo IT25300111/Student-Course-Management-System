@@ -81,6 +81,19 @@ public class LecturerService {
         return lecturerRepository.save(lecturer);
     }
 
+    public Lecturer updateProfile(Long id, LecturerProfileUpdateRequest request) {
+        Lecturer lecturer = getLecturerById(id);
+        requireText(request.name(), "Lecturer name is required");
+        lecturer.setName(request.name().trim());
+
+        if (request.password() != null && !request.password().isBlank()) {
+            validatePassword(request.password());
+            lecturer.setPassword(request.password());
+        }
+
+        return lecturerRepository.save(lecturer);
+    }
+
 
 
 
