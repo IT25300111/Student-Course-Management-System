@@ -83,6 +83,21 @@ public class AdminService {
 
         return adminRepository.save(admin);
     }
+
+    //for delete Admin
+    public void deleteAdmin(Long id) {
+        long adminCount = adminRepository.count();
+        if (adminCount <= 1) {
+            throw new ApiException(HttpStatus.BAD_REQUEST,
+                    "Cannot delete the only admin account. At least one admin must exist.");
+        }
+
+        Admin admin = adminRepository.findById(id)
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Admin not found"));
+
+        adminRepository.delete(admin);
+    }
+
 }
 
 
