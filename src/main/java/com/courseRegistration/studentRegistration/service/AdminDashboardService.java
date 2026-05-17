@@ -78,5 +78,40 @@ public class AdminDashboardService {
                 })
                 .collect(Collectors.toList());
     }
+
+    public List<TransactionSummaryDTO> getRecentTransactions() {
+        return paymentRepository.findAll().stream()
+                .sorted((p1, p2) -> p2.getPaidAt().compareTo(p1.getPaidAt()))
+                .limit(10)
+                .map(payment -> {
+                    // Find student and course for this payment
+                    Enrollment enrollment = enrollmentRepository.findAll().stream()
+                            .filter(e -> e.getPayment().getId().equals(payment.getId()))
+                            .findFirst()
+                            .orElse(null);
+
+                    String studentName = enrollment != null ?
+                            enrollment.getStudent().getName() : "Unknown";
+                    String courseTitle = enrollment != null ?
+                            enrollment.getCourse().getTitle() : "Unknown";
+
+                    return new TransactionSummaryDTO(
+                            payment.getTransactionReference(),
+                            studentName,
+                            courseTitle,
+                            payment.getAmount().doubleValue(),
+                            payment.getStatus(),
+                            payment.getPaidAt()
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
+    public double getTotalRevenue() {
+        return enrollmentRepository.findAll().stream()
+                .map(e -> e.getPayment().getAmount())
+                .mapToDouble(java.math.BigDecimal::doubleValue)
+                .sum();
+    }
 }
 
