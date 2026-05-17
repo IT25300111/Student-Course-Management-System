@@ -11,5 +11,6 @@ public record RegistrationResponse(
         String paymentStatus,
         String transactionReference,
         String message
+
 ) {
 }
