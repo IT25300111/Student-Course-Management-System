@@ -51,6 +51,37 @@ public class LecturerService {
                 "Lecturer login successful");
     }
 
+    public List<Lecturer> getAllLecturers() {
+        return lecturerRepository.findAll();
+    }
+
+    public Lecturer getLecturerById(Long id) {
+        return lecturerRepository.findById(id)
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Lecturer not found"));
+    }
+
+    public Lecturer updateLecturer(Long id, Lecturer updatedLecturer) {
+        Lecturer lecturer = getLecturerById(id);
+        requireText(updatedLecturer.getName(), "Lecturer name is required");
+        requireText(updatedLecturer.getUsername(), "Lecturer username is required");
+
+        String username = updatedLecturer.getUsername().trim();
+        if (lecturerRepository.existsByUsernameAndIdNot(username, id)) {
+            throw new ApiException(HttpStatus.CONFLICT, "This lecturer username is already registered");
+        }
+
+        lecturer.setName(updatedLecturer.getName().trim());
+        lecturer.setUsername(username);
+
+        if (updatedLecturer.getPassword() != null && !updatedLecturer.getPassword().isBlank()) {
+            validatePassword(updatedLecturer.getPassword());
+            lecturer.setPassword(updatedLecturer.getPassword());
+        }
+
+        return lecturerRepository.save(lecturer);
+    }
+
+
 
 
 }
