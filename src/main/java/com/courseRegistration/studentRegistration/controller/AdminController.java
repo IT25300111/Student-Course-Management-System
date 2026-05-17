@@ -21,5 +21,31 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    
+    @PostMapping("/register")
+    public AuthResponse register(@RequestBody AdminRegistrationRequest request) {
+        return adminService.register(request);
+    }
+
+    @PostMapping("/login")
+    public AuthResponse login(@RequestBody AdminLoginRequest request) {
+        return adminService.login(request);
+    }
+
+    @GetMapping
+    public List<Admin> getAllAdmins() {
+        return adminService.getAllAdmins();
+    }
+
+    //for update Admin
+    @PutMapping("/{id}")
+    public Admin updateAdmin(@PathVariable Long id, @RequestBody Admin admin) {
+        return adminService.updateAdmin(id, admin);
+    }
+
+    //for delete Admin
+    @DeleteMapping("/{id}")
+    public ApiMessage deleteAdmin(@PathVariable Long id) {
+        adminService.deleteAdmin(id);
+        return new ApiMessage("Admin deleted successfully");
+    }
 }
