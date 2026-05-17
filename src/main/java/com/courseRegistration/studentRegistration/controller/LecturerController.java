@@ -31,5 +31,15 @@ public class LecturerController {
         return lecturerService.getLecturerById(id);
     }
 
+    @PutMapping("/{id}")
+    public Lecturer updateLecturer(@PathVariable Long id, @RequestBody Lecturer lecturer) {
+        return lecturerService.updateLecturer(id, lecturer);
+    }
+
+    @PutMapping("/{id}/profile")
+    public Lecturer updateProfile(@PathVariable Long id, @RequestBody LecturerProfileUpdateRequest request) {
+        return lecturerService.updateProfile(id, request);
+    }
+
 
 }
