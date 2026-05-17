@@ -21,5 +21,13 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    
+    @PostMapping("/register")
+    public AuthResponse register(@RequestBody AdminRegistrationRequest request) {
+        return adminService.register(request);
+    }
+
+    @PostMapping("/login")
+    public AuthResponse login(@RequestBody AdminLoginRequest request) {
+        return adminService.login(request);
+    }
 }
