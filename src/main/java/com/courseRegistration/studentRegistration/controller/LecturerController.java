@@ -41,5 +41,14 @@ public class LecturerController {
         return lecturerService.updateProfile(id, request);
     }
 
+    @DeleteMapping("/{id}")
+    public ApiMessage deleteLecturer(@PathVariable Long id) {
+        lecturerService.deleteLecturer(id);
+        return new ApiMessage("Lecturer deleted successfully");
+    }
 
+    @GetMapping("/{id}/dashboard")
+    public LecturerDashboardDTO getDashboard(@PathVariable Long id) {
+        return lecturerService.getDashboard(id);
+    }
 }
